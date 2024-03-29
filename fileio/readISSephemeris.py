@@ -3,7 +3,7 @@
 #
 # pyOrbitSim::fileio::readISSephemeris.py
 #
-# extract [time (UTC), position (X,Y,Z) (km/s), velocity (X,Y,Z) (km/s)] from the ISS.OEM_J2K_EPH.txt file
+# extract [time (UTC), position (X,Y,Z) (m), velocity (X,Y,Z) (m/s)] from the ISS.OEM_J2K_EPH.txt file
 # and put the data into a matrix
 
 from pathlib import Path
@@ -45,8 +45,8 @@ def readISSephemeris(filename : str):
             second=int(float(timeSplit[2]))
         ))
 
-        parsedline.append([float(line[1]), float(line[2]), float(line[3])])
-        parsedline.append([float(line[4]), float(line[5]), float(line[6])])
+        parsedline.append([1000*float(line[1]), 1000*float(line[2]), 1000*float(line[3])])
+        parsedline.append([1000*float(line[4]), 1000*float(line[5]), 1000*float(line[6])])
 
         parseddata.append(parsedline)
 
