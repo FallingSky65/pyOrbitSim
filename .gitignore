@@ -1,3 +1,5 @@
 /ISS.OEM_J2K_EPH.txt
 /runner.py
 /fileio/__pycache__/
+/.gitignore
+/.DS_Store
