@@ -3,7 +3,7 @@
 #
 # pyOrbitSim::saveData.py
 #
-# plot latitude against the local time
+# save data into a csv file
 
 import csv
 

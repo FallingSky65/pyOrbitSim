@@ -17,7 +17,12 @@ from saveData import saveData
 data1 = readISSephemeris("./ISS.OEM_J2K_EPH.2022-01-31.2022-02-15.txt")
 data2 = readISSephemeris("./ISS.OEM_J2K_EPH.2022-02-14.2022-03-01.txt")
 
+data1 = eci2geodetic(data1)
+data2 = eci2geodetic(data2)
+
 data = concatData(data1, data2)
-data = eci2geodetic(data)
+
+#for row in data:
+    #print(row[0])
 
 saveData("ISSgeodeticData.csv", data)
