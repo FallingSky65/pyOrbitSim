@@ -53,29 +53,43 @@ def get_earth_color(lon, lat):
     color = earth_img.getpixel((x,y))
     return np.array(color, dtype=np.uint8)
 
-def render_ray(ray_origin, ray_dir, findex):
-    t = ray_sphere_intersection(ray_origin, ray_dir)
-    if t is None:
+def render_ray(ray_origin, ray_dir, depth, findex):
+    if depth < 0:
          return np.array(BG_COLOR, dtype=np.uint8)
-    p = ray_origin + t*ray_dir
+    p = ray_origin + depth*ray_dir
     po = p - sphere_center
     lon, lat = dir2lonlat(po)
     lon += findex*6
     return get_earth_color(lon, lat)
 
-def render_frame(image_data, findex):
+def render_frame(image_data, depth_buffer, findex):
     for i in range(WINH):
         for j in range(WINW):
             ray_origin = CAM_POS
             ray_dir = np.array([j - WINW/2, WINH/2 - i, SCREEN_DIST], dtype=np.float64)
             ray_dir /= np.linalg.norm(ray_dir)
-            image_data[i][j] = render_ray(ray_origin, ray_dir, findex)
+            image_data[i][j] = render_ray(ray_origin, ray_dir, depth_buffer[i][j], findex)
+
+def render_depth_buffer(depth_buffer):
+    for i in range(WINH):
+        for j in range(WINW):
+            ray_origin = CAM_POS
+            ray_dir = np.array([j - WINW/2, WINH/2 - i, SCREEN_DIST], dtype=np.float64)
+            ray_dir /= np.linalg.norm(ray_dir)
+            t = ray_sphere_intersection(ray_origin, ray_dir)
+            if t is None:
+                depth_buffer[i][j] = -1
+            else:
+                depth_buffer[i][j] = t
 
 def render_anim(frames=36, fps=12, loops=1):
     image_data = np.full((WINH,WINW,3), BG_COLOR, dtype=np.uint8)
+    depth_buffer = np.full((WINH,WINW), 0, dtype=np.float64)
+    render_depth_buffer(depth_buffer)
+
     print("rendering frames")
     for i in tqdm(range(frames)):
-        render_frame(image_data, i)
+        render_frame(image_data, depth_buffer, i)
         plt.imsave("frames/frame{}.png".format(i), image_data)
 
     print("writing to video")
