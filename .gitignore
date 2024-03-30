@@ -1,4 +1,6 @@
-/*/__pycache__/
-/.gitignore
-/.DS_Store
-/__pycache__/
+*/__pycache__/
+.DS_Store
+__pycache__/
+pyrightconfig.json
+animation/frames/*
+animation/earth2D.jpg
