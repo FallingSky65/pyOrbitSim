@@ -4,3 +4,4 @@ __pycache__/
 pyrightconfig.json
 animation/frames/*
 animation/earth2D.jpg
+animation/run.sh
